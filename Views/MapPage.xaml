@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             x:Class="TaskPro1.Views.MapPage"  
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"  
+             xmlns:icons="clr-namespace:TaskPro1.Helpers"  
+             xmlns:viewModels="clr-namespace:TaskPro1.ViewModels"  
+             xmlns:controls="clr-namespace:TaskPro1.Controls"  
+             xmlns:local="clr-namespace:TaskPro1.Views">
+
+    <Grid x:Name="MainGrid" RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="MapRow" Height="7*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition x:Name="SearchRow" Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Map and controls -->
+        <AbsoluteLayout Grid.Row="0">
+            <mapsui:MapControl  
+                BindingContext="{Binding MapPageVM}"
+                x:Name="mapView"  
+                AbsoluteLayout.LayoutFlags="All"  
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+                <mapsui:MapControl.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnMapTapped"/>
+                </mapsui:MapControl.GestureRecognizers>
+            </mapsui:MapControl>
+            <HorizontalStackLayout  
+                AbsoluteLayout.LayoutFlags="PositionProportional"  
+                AbsoluteLayout.LayoutBounds="0.95, 0.9, 100, 100"  
+                Spacing="10">
+               
+            </HorizontalStackLayout>
+        </AbsoluteLayout>
+
+        <!-- Drag handle -->
+        <BoxView Grid.Row="1"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Center">
+            <BoxView.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="OnDragHandlePanUpdated"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- SearchView at the bottom -->
+        <local:SearchView 
+            x:Name="searchView"
+            Grid.Row="2"
+            BindingContext="{Binding SearchVM}">
+            <local:SearchView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnSearchViewTapped"/>
+            </local:SearchView.GestureRecognizers>
+        </local:SearchView>
+    </Grid>
+</ContentPage>

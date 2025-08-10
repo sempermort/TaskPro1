@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TaskPro1.Views"
+             xmlns:viewModels="clr-namespace:TaskPro1.ViewModels"
+             xmlns:icons="clr-namespace:TaskPro1.Helpers"
+             x:Class="TaskPro1.Views.ListedNodesPage">
+
+    <VerticalStackLayout Padding="2">
+      <CarouselView ItemsSource="{Binding GroupedNodes}">               
+            <CarouselView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="{Binding Key}"
+                               FontSize="Small"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               Margin="0,10,0,0"/>
+                        <!-- ListView -->
+                        <ListView ItemsSource="{Binding}"
+                                  HorizontalOptions="Fill"
+                                  VerticalOptions="Fill">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Border Padding="5"
+                                                Margin="5"
+                                                BackgroundColor="White"
+                                                StrokeShape="RoundRectangle 10">
+                                            <Grid 
+                                                  RowDefinitions="Auto, Auto"
+                                                  ColumnDefinitions="Auto, 2*, *">
+                                                <Image Grid.RowSpan="2"
+                                                       Aspect="AspectFit"
+                                                       SemanticProperties.Description="TaskPro at your disposal!"
+                                                       Margin="5,5,23,5">
+                                                    <Image.Source>
+                                                        <FontImageSource
+                                                            FontFamily="FluentIconResizable"
+                                                            FontAutoScalingEnabled="True"
+                                                            Color="Black"
+                                                            Size="30"
+                                                            Glyph="{Static icons:FluentIconsResizable.Ic_fluent_sign_out_20_filled}"/>
+                                                    </Image.Source>
+                                                </Image>
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding Name}"
+                                                       FontAttributes="Bold"/>
+                                                <Label Grid.Row="1"
+                                                       Grid.Column="1"
+                                                       Text="{Binding Location, StringFormat='{0} 30 m from you'}"
+                                                       FontAttributes="Italic"/>
+                                                <Label Grid.Column="2"
+                                                       Text="{Binding Price, StringFormat='Price: {0:C} Tsh'}"
+                                                       FontAttributes="Bold"/>
+                                                <StackLayout Grid.Row="1"
+                                                             Grid.Column="2"
+                                                             Orientation="Horizontal"
+                                                             VerticalOptions="Center">
+                                                <Image SemanticProperties.Description="TaskPro at your disposal!">
+                                                    <Image.Source>
+                                                            <FontImageSource
+                                                                FontFamily="FluentIconResizable"
+                                                                FontAutoScalingEnabled="True"
+                                                                Color="Black"
+                                                                Glyph="{Static icons:FluentIconsResizable.Ic_fluent_sign_out_20_filled}"/>
+                                                        </Image.Source>
+                                                 </Image>
+                                                 <Label Text="2"/>
+                                                </StackLayout>
+                                            </Grid>
+                                        </Border>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <!-- Button at the bottom -->
+                        <Button Text="Click Me"
+                                BackgroundColor="Black"
+                                HorizontalOptions="Center"
+                                VerticalOptions="End"
+                                Margin="0,10,0,0"/> 
+                     </StackLayout>               
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+      <!-- <IndicatorView x:Name="Indicators"
+                     HorizontalOptions="Center" /> -->
+    </VerticalStackLayout>
+</ContentView>

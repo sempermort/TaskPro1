@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskPro1.Views.LoginPage"
+             Title="LoginPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackLayout Grid.Row="0" Margin="10,100,10,10" Background="{DynamicResource PrimaryDarkT}">
+            <Border HeightRequest="160" 
+             WidthRequest="160" 
+             StrokeShape="RoundRectangle 80,80,80,80"
+             HorizontalOptions="Center"
+             StrokeThickness="8" 
+             Margin="0,0,0,0">
+                <Image Aspect="AspectFit" 
+                Source="splashs.png"
+                SemanticProperties.Description="TaskPro at you disposal!"
+                HeightRequest="160" 
+                WidthRequest="160" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+            </Border>
+            <Label 
+         Text="Login"
+         VerticalOptions="Center" 
+         HorizontalOptions="Center" />
+        </StackLayout>
+        <StackLayout Grid.Row="1"  VerticalOptions="Center">
+            <Entry Placeholder="Enter your Email" Text="{Binding Email}" ClearButtonVisibility="WhileEditing" Margin="10,10,10,10" />
+            <Entry Placeholder="Enter your password" Text="{Binding Password}" IsPassword="True" Margin="10,10,10,10"/>
+            <Button Text="Login" 
+                    Command="{Binding LoginCommand}"  
+                    Background="{DynamicResource AccentT}"
+                    WidthRequest="200"
+                    Margin="10,10,10,10"
+                    HorizontalOptions="Center"/>
+        </StackLayout>
+    </Grid> 
+</ContentPage>

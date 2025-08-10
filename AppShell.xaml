@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TaskPro1.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TaskPro1"
+    xmlns:localPages="clr-namespace:TaskPro1.Views"
+    xmlns:icons="clr-namespace:TaskPro1.Helpers"
+    Shell.FlyoutBehavior="Flyout"
+    Shell.TabBarIsVisible="False"
+    Shell.ForegroundColor="Black"
+    Shell.BackgroundColor="Transparent"    
+    Shell.NavBarHasShadow="False"
+    Title="TaskPro">
+
+    <!--<Shell.Resources>
+        <ResourceDictionary>
+        
+    </ResourceDictionary>
+   </Shell.Resources>-->
+    <Shell.ItemTemplate>
+        <DataTemplate >
+            <Grid x:Name="grid" HeightRequest="50">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter TargetName="_Label" Property="Label.TextColor" Value="Black" />
+                                    <Setter TargetName="_ItemIcon" Property="Label.TextColor" Value="Black" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter TargetName="_Label" Property="Label.TextColor" Value="Purple" />
+                                    <Setter TargetName="_ItemIcon" Property="Label.TextColor" Value="Purple" />
+                                    <Setter Property="BackgroundColor" Value="#642B7380"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="54" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label x:Name="_ItemIcon"  
+                       FontFamily="FluentIconRegular"         
+                       Text="{Binding Icon}" 
+                       VerticalOptions ="Center"
+                       FontSize="30"  
+                       Margin="5"
+                       TextColor="Black"/>
+
+                <Label x:Name="_Label"
+                       Grid.Column="1"
+                       Text="{Binding Title}"
+                       VerticalTextAlignment="Center"
+                       VerticalOptions="Center"
+                       TextColor="White"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <Shell.FlyoutBackground>
+        <RadialGradientBrush  Center="0.0,0.0"  >
+            <GradientStop Color="#8615bd" Offset="0.3"/>
+            <!--separation line-->
+            <GradientStop Color="#bb97cc" Offset="0.495" />
+            <GradientStop Color="#ab6acb" Offset="0.5"/>
+            <!--separation line-->
+            <GradientStop Color="#e5ccf1" Offset="0.695"/>
+            <GradientStop Color="#d4abe8" Offset="0.7"/>
+            <!--separation line-->
+            <GradientStop Color="#e5ccf1" Offset="0.895"/>
+            <GradientStop Color="#ffffff" Offset="0.9"/>
+        </RadialGradientBrush>
+
+    </Shell.FlyoutBackground>
+    <Shell.FlyoutHeader>
+        <HorizontalStackLayout Grid.Row="0" Margin="10,10,10,10" Background="{DynamicResource PrimaryDarkT}">
+            <Border HeightRequest="100" 
+                    WidthRequest="100" 
+                    StrokeShape="RoundRectangle 80,80,80,80"
+                    HorizontalOptions="Center"
+                    Background="Black"
+                    Margin="10,10,10,20">
+                <Image Aspect="AspectFit"                        
+                       SemanticProperties.Description="TaskPro at you disposal!"
+                       VerticalOptions="Center" 
+                       HorizontalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource 
+                            FontFamily="FluentIconResizable"
+                            FontAutoScalingEnabled="True"
+                            Glyph="{Static icons:FluentIconsResizable.Ic_fluent_person_6_20_filled}"/>
+                    </Image.Source>
+                </Image>
+            </Border>
+            <VerticalStackLayout VerticalOptions="Center">
+                <Label 
+                    Text="Adoretz"
+                    TextColor="{DynamicResource PrimaryZ}"
+                    FontSize="Large"
+                    FontAttributes="Bold"/>
+                <Label 
+                    Text="10 Connections"/>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+    </Shell.FlyoutHeader>
+    <Shell.FlyoutFooter>
+        <HorizontalStackLayout Grid.Row="0" Margin="10,10,10,10">
+            <Image Aspect="AspectFit"                        
+                       SemanticProperties.Description="TaskPro at you disposal!"
+                       VerticalOptions="Center" 
+                       HorizontalOptions="Center"
+                       Margin="5,5,23,5">
+                <Image.Source>
+                    <FontImageSource 
+                            FontFamily="FluentIconResizable"
+                            FontAutoScalingEnabled="True"
+                            Color="Black"
+                            Glyph="{Static icons:FluentIconsResizable.Ic_fluent_sign_out_20_filled}"/>
+                </Image.Source>
+            </Image>
+            <Label 
+                    Text="Sign Out"
+                    FontSize="Large"
+                    FontAttributes="Bold"/>
+        </HorizontalStackLayout>
+    </Shell.FlyoutFooter>
+
+    <FlyoutItem  
+        Title="Home"
+        FlyoutDisplayOptions="AsMultipleItems"
+        
+        >
+
+        <ShellContent
+        Title="Profile"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="Mainpage"
+        Icon="{Static icons:FluentIconsRegular.Ic_fluent_person_20_regular}" />
+
+        <ShellContent
+        Title="Payments"
+        ContentTemplate="{DataTemplate localPages:PaymentsPage}"
+        Route="PaymentsPage" 
+        Icon="{Static icons:FluentIconsRegular.Ic_fluent_payment_20_regular}" />
+
+        <ShellContent
+        Title="History"
+        ContentTemplate="{DataTemplate localPages:HistoryPage}"
+        Route="HistoryPage"
+        Icon="{Static icons:FluentIconsRegular.Ic_fluent_history_20_regular}" />
+
+        <ShellContent
+        Title="Promotion"
+        ContentTemplate="{DataTemplate localPages:PromoPage}"
+        Route="PromoPage"
+        Icon="{Static icons:FluentIconsRegular.Ic_fluent_gift_card_add_20_regular}" />
+
+        <ShellContent
+        Title="Show All Page"
+        ContentTemplate="{DataTemplate localPages:ShowAllPage}"
+        Route="ShowAllPage" 
+        Icon="{Static icons:FluentIconsRegular.Ic_fluent_chat_help_20_regular}" />
+
+        <ShellContent
+        Title="Map Page"
+        ContentTemplate="{DataTemplate localPages:MapPage}"
+        Route="MapPage"
+        Icon="{Static icons:FluentIconsRegular.Ic_fluent_contact_card_group_20_regular}" />
+
+    </FlyoutItem>
+</Shell>

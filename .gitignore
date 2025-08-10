@@ -1,0 +1,14 @@
+# Build folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userprefs
+
+# Visual Studio folders
+.vs/
+.vscode/
+
+# NuGet packages
+*.nupkg
