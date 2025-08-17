@@ -1,71 +1,76 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:icons="clr-namespace:TaskPro1.Helpers"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"  
+             xmlns:icons="clr-namespace:TaskPro1.Helpers"  
              x:Class="TaskPro1.Views.SearchView">
-    <Border
-        Stroke="Gray"
-        BackgroundColor="White"
-        StrokeThickness="1"
-        Margin="0"
-        Padding="0"
-        IsVisible="{Binding SearchResults.Count, Converter={StaticResource GreaterThanZeroConverter}}"
+    <Border  
+        Stroke="Gray"  
+        BackgroundColor="White"  
+        StrokeThickness="1"  
+        Margin="0"  
+        Padding="0"  
+        IsVisible="{Binding SearchResults.Count, Converter={StaticResource GreaterThanZeroConverter}}"  
         StrokeShape="RoundRectangle 20,20,0,0">
         <VerticalStackLayout>
-            <SearchBar
-                Placeholder="Search..."
-                Text="{Binding SearchText, Mode=TwoWay}"
+            <SearchBar  
+                Placeholder="Search..."  
+                Text="{Binding SearchText, Mode=TwoWay}"  
                 SearchCommand="{Binding SearchCommand}"/>
 
-            <CollectionView
-                ItemsSource="{Binding FilteredNodes}"
-                x:Name="searchView"
+            <CollectionView  
+                ItemsSource="{Binding FilteredNodes}"  
+                x:Name="searchView"  
                 VerticalOptions="Fill">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border>
-                            <Grid
-                                RowDefinitions="Auto, Auto"
-                                ColumnDefinitions="Auto, 2*,*">                             
-                                    <Image Grid.RowSpan="2"
-                                           Aspect="AspectFit"
-                                           SemanticProperties.Description="TaskPro at your disposal!"
-                                           Margin="5,5,8,5"
-                                           IsEnabled="{Binding ZoomToLocationCommand.CanExecute, Converter={StaticResource BoolConverter}}">
-                                        <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ZoomToLocationCommand}" 
-                                                                  CommandParameter="{Binding .}" />
-                                        </Image.GestureRecognizers>
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="FluentIconResizable"
-                                                FontAutoScalingEnabled="True"
-                                                Color="Gray"
-                                                Size="30"
-                                                Glyph="{x:Static icons:FluentIconsResizable.Ic_fluent_location_live_20_filled}"/>
-                                        </Image.Source>
-                                    </Image>
-                              
-                                <Label Grid.Column="1"
-                                       Text="{Binding Name}"
+                            <Grid  
+                                RowDefinitions="Auto, Auto"  
+                                ColumnDefinitions="Auto, 2*,*">
+                                <Image x:Name="LocationImage"
+                                       Aspect="AspectFit"
+                                       SemanticProperties.Description="TaskPro at your disposal!"
+                                       Margin="5,5,8,5"
+                                       IsEnabled="{Binding ZoomToLocationCommand.CanExecute, Converter={StaticResource BoolConverter}}">
+
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnLocationImageTapped"
+                                                              Command="{Binding ZoomToLocationCommand}" 
+                                                              CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+
+                                    <Image.Source>
+                                        <FontImageSource  
+                                        FontFamily="FluentIconResizable"  
+                                        FontAutoScalingEnabled="True"  
+                                        Color="Gray"  
+                                        Size="30"  
+                                        Glyph="{x:Static icons:FluentIconsResizable.Ic_fluent_location_live_20_filled}"/>
+                                    </Image.Source>
+                                </Image>
+
+
+                                <Label Grid.Column="1"  
+                                       Text="{Binding Name}"  
                                        FontAttributes="Bold"/>
-                                <Label Grid.Row="1"
-                                       Grid.Column="1"
-                                       Text="{Binding Location, StringFormat='{0} 30 m from you'}"
+                                <Label Grid.Row="1"  
+                                       Grid.Column="1"  
+                                       Text="{Binding Location, StringFormat='{0} 30 m from you'}"  
                                        />
-                                <Label Grid.Column="2"
-                                       Text="{Binding Price, StringFormat=' {0:C}'}"
+                                <Label Grid.Column="2"  
+                                       Text="{Binding Price, StringFormat=' {0:C}'}"  
                                        FontAttributes="Bold"/>
-                                <StackLayout Grid.Row="1"
-                                             Grid.Column="2"
-                                             Orientation="Horizontal"
+                                <StackLayout Grid.Row="1"  
+                                             Grid.Column="2"  
+                                             Orientation="Horizontal"  
                                              VerticalOptions="Center">
                                     <Image SemanticProperties.Description="TaskPro at your disposal!">
                                         <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="FluentIconResizable"
-                                                FontAutoScalingEnabled="True"
-                                                Color="Black"
+                                            <FontImageSource  
+                                                FontFamily="FluentIconResizable"  
+                                                FontAutoScalingEnabled="True"  
+                                                Color="Black"  
                                                 Glyph="{x:Static icons:FluentIconsResizable.Ic_fluent_sign_out_20_filled}"/>
                                         </Image.Source>
                                     </Image>
@@ -78,4 +83,5 @@
             </CollectionView>
         </VerticalStackLayout>
     </Border>
-</ContentView>
+</ContentView>  
+

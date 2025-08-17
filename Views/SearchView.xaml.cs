@@ -35,4 +35,13 @@ public partial class SearchView : ContentView
     {
         ZoomRequestedFromView?.Invoke(this, e);
     }
+
+    private async void OnLocationImageTapped(object sender, TappedEventArgs e)
+    {
+        if (LocationImage == null)
+            return;
+
+        await LocationImage.ScaleTo(0.8, 100, Easing.CubicOut);
+        await LocationImage.ScaleTo(1, 100, Easing.CubicIn);
+    }
 }

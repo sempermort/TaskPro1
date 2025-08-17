@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using TaskPro1.Helpers;
 using TaskPro1.ViewModels;
@@ -12,6 +14,7 @@ namespace TaskPro1
         {
             var builder = MauiApp.CreateBuilder();
             builder.UseMauiApp<App>()
+                   .UseMauiCommunityToolkit()
                    .UseSkiaSharp()
                    .ConfigureFonts(fonts =>
                     {
@@ -22,8 +25,10 @@ namespace TaskPro1
                         fonts.AddFont("FluentSystemIcons-Resizable.ttf", "FluentIconResizable");
                     });
             builder.Services.AddSingleton<FontAwesomeHelper>();
-           
-        
+
+            // Register IMessenger (singleton)
+            builder.Services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
             // Register view models
             builder.Services.AddTransient<MapPageViewModel>();
             builder.Services.AddTransient<SearchViewModel>();

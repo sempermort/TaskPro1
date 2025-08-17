@@ -1,36 +1,48 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TaskPro1.Models; // Adjust namespace as needed
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using System.Collections.Generic;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-
+using Windows.Services.Maps;
+using TaskPro1.Helpers;
 namespace TaskPro1.ViewModels
 {
-    public class SearchViewModel : ObservableObject, INotifyPropertyChanged
+    public partial class SearchViewModel : ObservableObject, INotifyPropertyChanged
     {
         private string? _searchText;
+        private readonly ICenterOnMap _centerOn;
         private ObservableCollection<Node> _filteredNodes;
         public ICommand ZoomToLocationCommand { get; }
 
         public event EventHandler<Node>? ZoomRequested;
-        public SearchViewModel()
-        {            
-            _filteredNodes = new ObservableCollection<Node>(TestData.Nodes);
-            ZoomToLocationCommand = new RelayCommand<Node>(ZoomToLocation);
-        }
-              
+        [ObservableProperty]
+        private bool isImageClicked;
+     
 
-        private void ZoomToLocation(Node? node)
+        public SearchViewModel(ICenterOnMap centerOn)
         {
-            // Raise the event when zoom is requested
-            if (node is not null)
-                ZoomRequested?.Invoke(this, node);
+            _filteredNodes = new ObservableCollection<Node>(TestData.Nodes);
+            ZoomToLocationCommand = new AsyncCommand(async (param,param2) =>
+            {
+                if (param is Node node)
+                {
+                    // Optional: animate something bound to the UI
+                    await AnimateTapAsync(param2);
+
+                    // Call the service directly (no messenger)
+                    _centerOn.CenterMapOnLocation(node.Longitude, node.Latitude, 15);
+                }
+            });
+
         }
+
+
+ 
         public string SearchText
         {
             get => _searchText!;
@@ -57,8 +69,6 @@ namespace TaskPro1.ViewModels
                 }
             }
         }
-
-      
 
         private void FilterNodes()
         {
