@@ -2,47 +2,44 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Maui.Animations;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using TaskPro1.Helpers;
 using TaskPro1.Models; // Adjust namespace as needed
 using Windows.Services.Maps;
-using TaskPro1.Helpers;
+
 namespace TaskPro1.ViewModels
 {
     public partial class SearchViewModel : ObservableObject, INotifyPropertyChanged
     {
         private string? _searchText;
-        private readonly ICenterOnMap _centerOn;
+        private readonly ICenterOnMap _mapService;
+        private readonly IAnimate _animationService;
         private ObservableCollection<Node> _filteredNodes;
         public ICommand ZoomToLocationCommand { get; }
 
         public event EventHandler<Node>? ZoomRequested;
         [ObservableProperty]
         private bool isImageClicked;
-     
-
-        public SearchViewModel(ICenterOnMap centerOn)
+      
+        public SearchViewModel(IMapOperationsService mapOperationsService)
         {
+            _mapOperationsService = mapOperationsService;
             _filteredNodes = new ObservableCollection<Node>(TestData.Nodes);
-            ZoomToLocationCommand = new AsyncCommand(async (param,param2) =>
+            ZoomToLocationCommand = new AsyncRelayCommand<Node>(async (node) =>
             {
-                if (param is Node node)
+                if (node != null)
                 {
-                    // Optional: animate something bound to the UI
-                    await AnimateTapAsync(param2);
-
                     // Call the service directly (no messenger)
-                    _centerOn.CenterMapOnLocation(node.Longitude, node.Latitude, 15);
+                    _mapOperationsService.CenterMapOnLocation(node.Longitude, node.Latitude, 15);
                 }
             });
-
         }
 
-
- 
         public string SearchText
         {
             get => _searchText!;

@@ -25,13 +25,27 @@ namespace TaskPro1
                         fonts.AddFont("FluentSystemIcons-Resizable.ttf", "FluentIconResizable");
                     });
             builder.Services.AddSingleton<FontAwesomeHelper>();
+            
+            // Register our image ontap operations service
+            builder.Services.AddSingleton<IAnimateOnTap,OnTapService>();
+             builder.Services.AddSingleton<IAnimateOnTap,OnTapService>();
 
             // Register IMessenger (singleton)
             builder.Services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
-            // Register view models
-            builder.Services.AddTransient<MapPageViewModel>();
-            builder.Services.AddTransient<SearchViewModel>();
+            // Register view models with dependencies
+            builder.Services.AddTransient<MapPageViewModel>(sp =>
+            {
+                var fontHelper = sp.GetRequiredService<FontAwesomeHelper>();
+                var mapOpsService = sp.GetRequiredService<IMapOperationsService>();
+                return new MapPageViewModel(fontHelper, mapOpsService);
+            });
+            
+            builder.Services.AddTransient<SearchViewModel>(sp =>
+            {
+                var mapOpsService = sp.GetRequiredService<IMapOperationsService>();
+                return new SearchViewModel(mapOpsService);
+            });
 
             // Register MapPage with a factory to inject dependencies
             builder.Services.AddTransient<MapPageCompositeViewModel>(sp =>

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskPro1.Models;
 
 namespace TaskPro1.Helpers
 {
-   public interface ICenterOnMap
+    public interface IMapOperationsService
     {
         void CenterMapOnLocation(double lon, double lat, double zoom);
         Task AnimateTapAsync(Image image);
+        Task LoadMarkersAsync(IEnumerable<Node> nodes, string icon);
+        void RefreshMap();
     }
 }

@@ -13,13 +13,14 @@ public partial class SearchView : ContentView
         InitializeComponent();
         this.BindingContextChanged += SearchView_BindingContextChanged;
     }
+    
     public SearchView(SearchViewModel vm)
     {
         InitializeComponent();
-        BindingContext = _viewModel=vm;
+        BindingContext = _viewModel = vm;
 
         _viewModel.ZoomRequested += OnZoomRequested;
-    
+     
         this.BindingContextChanged += SearchView_BindingContextChanged;
     }
 
@@ -31,6 +32,7 @@ public partial class SearchView : ContentView
             vm.ZoomRequested += OnZoomRequested;
         }
     }
+    
     private void OnZoomRequested(object? sender, Node e)
     {
         ZoomRequestedFromView?.Invoke(this, e);
@@ -38,10 +40,10 @@ public partial class SearchView : ContentView
 
     private async void OnLocationImageTapped(object sender, TappedEventArgs e)
     {
-        if (LocationImage == null)
-            return;
-
-        await LocationImage.ScaleTo(0.8, 100, Easing.CubicOut);
-        await LocationImage.ScaleTo(1, 100, Easing.CubicIn);
+        if (sender is Image image)
+        {
+            await image.ScaleTo(0.8, 100, Easing.CubicOut);
+            await image.ScaleTo(1, 100, Easing.CubicIn);
+        }
     }
 }

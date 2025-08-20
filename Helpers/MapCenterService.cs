@@ -2,43 +2,45 @@
 using Mapsui.Extensions;
 using Mapsui.Projections;
 using Mapsui.UI.Maui;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskPro1.Models;
 using TaskPro1.ViewModels;
 
 namespace TaskPro1.Helpers
 {
-    class CenterOnMapService : ICenterOnMap
+    public class MapOperationsService :  ICenterOnMap
     {
-
-        private readonly MapView _mapView;
+        private readonly MapControl _mapControl;
         private readonly Image _image;
 
-        public CenterOnMapService(MapView mapView,Image image)
+        public MapOperationsService(MapControl mapControl, Image image)
         {
-            _mapView = mapView;
+            _mapControl = mapControl;
             _image = image;
         }
-
 
         public void CenterMapOnLocation(double lon, double lat, double zoom)
         {
             var sm = SphericalMercator.FromLonLat(lon, lat);
-            _mapView.Map.Navigator.CenterOn(sm.ToMPoint());
-            _mapView.Map.Navigator.ZoomTo(zoom);
-            _mapView.Refresh();
+            _mapControl.Map.Navigator.CenterOn(sm.ToMPoint());
+            _mapControl.Map.Navigator.ZoomTo(zoom);
+            _mapControl.Refresh();
         }
-        private async void AnimateTapAsync(Image image)
+
+        public async Task AnimateTapAsync(Image image)
         {
             if (image == null)
                 return;
 
             // 👇 Animate image (pulse effect)
-            await _image.ScaleTo(0.8, 100, Easing.CubicOut);
-            await _image.ScaleTo(1, 100, Easing.CubicIn);
+            await image.ScaleTo(0.8, 100, Easing.CubicOut);
+            await image.ScaleTo(1, 100, Easing.CubicIn);
         }
+
     }
 }

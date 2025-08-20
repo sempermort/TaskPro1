@@ -6,7 +6,6 @@ using TaskPro1.Helpers;
 using TaskPro1.ViewModels;
 using Windows.Devices.Geolocation;
 
-
 namespace TaskPro1.Views;
 
 public partial class MapPage : ContentPage
@@ -15,8 +14,8 @@ public partial class MapPage : ContentPage
  
     private Layer? _markersLayer;
     private MapPageCompositeViewModel? viewModel;
+    private IMapOperationsService? _mapOperationsService;
     public string Icon { get; set; } = "/uf041"; // bindable or injected
-
 
     private MapPage()
     {
@@ -29,6 +28,9 @@ public partial class MapPage : ContentPage
         InitializeComponent();
         viewModel = compositeVM;
         SetCompositeBindingContext(compositeVM.MapPageVM, compositeVM.SearchVM);
+        
+        // Initialize the map operations service
+        _mapOperationsService = new MapOperationsService(mapView, new Image());
     }
 
     private void SetDefaultBindingContext()
@@ -46,15 +48,12 @@ public partial class MapPage : ContentPage
         mapView.Refresh(); // Refresh the map view when features change
     }
 
-
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         await CheckLocationPermissionRequestAsync();        
         await LoadMapAsync();
-
     }
-
 
     private async Task LoadMapAsync()
     {
@@ -70,8 +69,8 @@ public partial class MapPage : ContentPage
 
             await viewModel.MapPageVM.InitializeAsync(mapView.Map, TestData.Nodes, Icon);
 
-
-            CenterMapOnLocation(location.Longitude, location.Latitude, zoomLevel);
+            // Use the map operations service to center the map
+            _mapOperationsService?.CenterMapOnLocation(location.Longitude, location.Latitude, zoomLevel);
         }
         catch (Exception ex)
         {
@@ -85,23 +84,11 @@ public partial class MapPage : ContentPage
         return await Geolocation.GetLocationAsync(request);
     }
 
-    private void CenterMapOnLocation(double lon, double lat, double zoom)
-    {
-        var sm = SphericalMercator.FromLonLat(lon, lat);
-        mapView.Map.Navigator.CenterOn(sm.ToMPoint());
-        mapView.Map.Navigator.ZoomTo(zoom);
-        mapView.Refresh(); // Refresh the map view to apply changes
-    }
-
     private async Task<int> GetPinBitmapId(string iconCode)
     {
         string fontPath = "FluentSystemIconsRegular.ttf";
         return await FontAwesomeHelper.CreateFontAwesomePin(iconCode, fontPath, SKColors.Red, 64);
     }
-
-  
-
-  
 
     private async Task CheckLocationPermissionRequestAsync()
     {
@@ -126,7 +113,6 @@ public partial class MapPage : ContentPage
 #endif
     } 
 
-
     private void OnMenuTapped(object sender, EventArgs e) =>
         DisplayAlert("Tapped", "Image was tapped!", "OK");
 
@@ -138,8 +124,9 @@ public partial class MapPage : ContentPage
 
     private void OnDragHandlePanUpdated(object sender, PanUpdatedEventArgs e) =>
         Console.WriteLine($"Pan: {e.StatusType}, X={e.TotalX}, Y={e.TotalY}");
+        
     private void OnSearchViewTapped(object sender, EventArgs e) =>
-    SetGridProportions(4, 6);
+        SetGridProportions(4, 6);
 
     private void OnMapTapped(object sender, EventArgs e) =>
         SetGridProportions(7, 3);
@@ -149,6 +136,4 @@ public partial class MapPage : ContentPage
         MainGrid.RowDefinitions[0].Height = new GridLength(searchRowStar, GridUnitType.Star);
         MainGrid.RowDefinitions[2].Height = new GridLength(mapRowStar, GridUnitType.Star);
     }
-
-   
 }

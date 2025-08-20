@@ -14,27 +14,25 @@ using TaskPro1.Helpers;
 using TaskPro1.Models;
 using TaskPro1.Services;
 
-
-
 namespace TaskPro1.ViewModels
 {
     public partial class MapPageViewModel : ObservableObject
     {
         private readonly IGoogleMapsApiService _googleMapsApi = new GoogleMapsApiService();
-        private readonly FontAwesomeHelper _fontAwesomeHelper;       
+        private readonly FontAwesomeHelper _fontAwesomeHelper;
+        private readonly IMapOperationsService _mapOperationsService;
 
         public ObservableCollection<PriceOption> PriceOptions { get; private set; }
-        public ObservableCollection<PlaceAutoCompletePrediction> Places { get; private set; }       
+        public ObservableCollection<PlaceAutoCompletePrediction> Places { get; private set; }
 
         [ObservableProperty]
-        private ObservableCollection<Node> filteredNodes = new(TestData.Nodes);       
+        private ObservableCollection<Node> filteredNodes = new(TestData.Nodes);
 
         [ObservableProperty]
         private PlaceAutoCompletePrediction? recentPlace1;
 
         [ObservableProperty]
         private PlaceAutoCompletePrediction? recentPlace2;
-
 
         [ObservableProperty]
         private PriceOption? priceOptionSelected;
@@ -64,14 +62,13 @@ namespace TaskPro1.ViewModels
 
         public IAsyncRelayCommand<PlaceAutoCompletePrediction> GetPlaceDetailCommand { get; }
         public IAsyncRelayCommand<string> GetPlacesCommand { get; }
-     
+
         public ObservableCollection<IFeature> Features { get; } = new();
 
-
-        public MapPageViewModel( FontAwesomeHelper fontAwesomeHelper)
+        public MapPageViewModel(FontAwesomeHelper fontAwesomeHelper, IMapOperationsService mapOperationsService)
         {
-         
             _fontAwesomeHelper = fontAwesomeHelper;
+            _mapOperationsService = mapOperationsService;
 
             RecentPlace1 = RecentPlacesStore.RecentPlaces.FirstOrDefault();
             RecentPlace2 = RecentPlacesStore.RecentPlaces.LastOrDefault();
@@ -130,6 +127,7 @@ namespace TaskPro1.ViewModels
                 // Do something with the detailed location
             }
         }
+        
         public async Task InitializeAsync(Mapsui.Map map, IEnumerable<Node> nodes, string iconCode)
         {
             Features.Clear();
@@ -158,8 +156,6 @@ namespace TaskPro1.ViewModels
             await Task.CompletedTask;
         }
 
-   
-
         private async Task<IFeature> CreateFeatureAsync(double longitude, double latitude, string icon, string label)
         {
             var feature = new PointFeature(Mapsui.Projections.SphericalMercator.FromLonLat(longitude, latitude).ToMPoint())
@@ -183,10 +179,7 @@ namespace TaskPro1.ViewModels
 
         public void CenterMapOnLocation(double lon, double lat, double zoom)
         {
-            var sm = SphericalMercator.FromLonLat(lon, lat);
-            _map.Navigator.CenterOn(sm.ToMPoint());
-            _map.Navigator.ZoomTo(zoom);
-            // No need to call Refresh in most MVVM-mapped libraries
+            _mapOperationsService?.CenterMapOnLocation(lon, lat, zoom);
         }
     }
 }
