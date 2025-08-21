@@ -11,6 +11,7 @@ using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TaskPro1.Helpers;
+using TaskPro1.Helpers.Interfaces;
 using TaskPro1.Models;
 using TaskPro1.Services;
 
@@ -20,7 +21,6 @@ namespace TaskPro1.ViewModels
     {
         private readonly IGoogleMapsApiService _googleMapsApi = new GoogleMapsApiService();
         private readonly FontAwesomeHelper _fontAwesomeHelper;
-        private readonly IMapOperationsService _mapOperationsService;
 
         public ObservableCollection<PriceOption> PriceOptions { get; private set; }
         public ObservableCollection<PlaceAutoCompletePrediction> Places { get; private set; }
@@ -65,10 +65,10 @@ namespace TaskPro1.ViewModels
 
         public ObservableCollection<IFeature> Features { get; } = new();
 
-        public MapPageViewModel(FontAwesomeHelper fontAwesomeHelper, IMapOperationsService mapOperationsService)
+        public MapPageViewModel(FontAwesomeHelper fontAwesomeHelper)
         {
             _fontAwesomeHelper = fontAwesomeHelper;
-            _mapOperationsService = mapOperationsService;
+            
 
             RecentPlace1 = RecentPlacesStore.RecentPlaces.FirstOrDefault();
             RecentPlace2 = RecentPlacesStore.RecentPlaces.LastOrDefault();
@@ -80,15 +80,6 @@ namespace TaskPro1.ViewModels
             GetPlaceDetailCommand = new AsyncRelayCommand<PlaceAutoCompletePrediction>(GetPlaceDetail);
         }
 
-        public MapPageViewModel(Mapsui.Map map)
-        {
-            _map = map;
-
-            CenterOnCommand = new RelayCommand<Node>(node =>
-            {
-                CenterMapOnLocation(node.Longitude, node.Latitude, 15); // or whatever zoom
-            });
-        }
 
         private async Task OnZoomInAsync()
         {
@@ -177,9 +168,6 @@ namespace TaskPro1.ViewModels
             return feature;
         }
 
-        public void CenterMapOnLocation(double lon, double lat, double zoom)
-        {
-            _mapOperationsService?.CenterMapOnLocation(lon, lat, zoom);
-        }
+       
     }
 }

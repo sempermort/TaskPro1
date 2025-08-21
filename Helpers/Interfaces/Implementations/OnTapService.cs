@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskPro1.Helpers.Interfaces;
 
-namespace TaskPro1.Helpers
+namespace TaskPro1.Helpers.Interfaces.Implementations
 {
     public class OnTapService : IAnimateOnTap
     {

@@ -35,9 +35,8 @@
                                        IsEnabled="{Binding ZoomToLocationCommand.CanExecute, Converter={StaticResource BoolConverter}}">
 
                                     <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnLocationImageTapped"
-                                                              Command="{Binding ZoomToLocationCommand}" 
-                                                              CommandParameter="{Binding .}" />
+                                        <TapGestureRecognizer Command="{Binding ZoomToLocationCommand}" 
+                                                              CommandParameter="{x:Reference IconImage}" />
                                     </Image.GestureRecognizers>
 
                                     <Image.Source>

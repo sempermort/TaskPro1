@@ -1,16 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
-using Microsoft.Maui.Animations;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TaskPro1.Helpers;
+using TaskPro1.Helpers.Interfaces;
 using TaskPro1.Models; // Adjust namespace as needed
-using Windows.Services.Maps;
 
 namespace TaskPro1.ViewModels
 {
@@ -18,24 +15,33 @@ namespace TaskPro1.ViewModels
     {
         private string? _searchText;
         private readonly ICenterOnMap _mapService;
-        private readonly IAnimate _animationService;
+        private readonly IAnimateOnTap _animationService;
         private ObservableCollection<Node> _filteredNodes;
         public ICommand ZoomToLocationCommand { get; }
 
         public event EventHandler<Node>? ZoomRequested;
         [ObservableProperty]
         private bool isImageClicked;
-      
-        public SearchViewModel(IMapOperationsService mapOperationsService)
+        private FontAwesomeHelper _fontAwesomeHelper;
+
+        public SearchViewModel(FontAwesomeHelper fontAwesomeHelper)
         {
-            _mapOperationsService = mapOperationsService;
+            _fontAwesomeHelper = fontAwesomeHelper;
+        }
+        public SearchViewModel(ICenterOnMap mapService, IAnimateOnTap animationService)
+        {
+            _mapService = mapService;
+            _animationService = animationService;
             _filteredNodes = new ObservableCollection<Node>(TestData.Nodes);
-            ZoomToLocationCommand = new AsyncRelayCommand<Node>(async (node) =>
+            ZoomToLocationCommand = new AsyncCommand(async (param) =>
             {
-                if (node != null)
+                if (param is Image image && image.BindingContext is Node node)
                 {
-                    // Call the service directly (no messenger)
-                    _mapOperationsService.CenterMapOnLocation(node.Longitude, node.Latitude, 15);
+                    // animate the tapped image
+                    await _animationService.PulseAsync(image);
+
+                    // center map
+                    _mapService.CenterMapOnLocation(node.Longitude, node.Latitude, 15);
                 }
             });
         }

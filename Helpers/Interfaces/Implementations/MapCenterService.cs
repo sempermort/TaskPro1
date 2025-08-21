@@ -8,20 +8,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskPro1.Helpers.Interfaces;
 using TaskPro1.Models;
 using TaskPro1.ViewModels;
 
-namespace TaskPro1.Helpers
+namespace TaskPro1.Helpers.Interfaces.Implementations
 {
-    public class MapOperationsService :  ICenterOnMap
+    public class MapCenterService :  ICenterOnMap
     {
         private readonly MapControl _mapControl;
         private readonly Image _image;
 
-        public MapOperationsService(MapControl mapControl, Image image)
+        public MapCenterService(MapControl mapControl)
         {
             _mapControl = mapControl;
-            _image = image;
         }
 
         public void CenterMapOnLocation(double lon, double lat, double zoom)
@@ -32,15 +32,7 @@ namespace TaskPro1.Helpers
             _mapControl.Refresh();
         }
 
-        public async Task AnimateTapAsync(Image image)
-        {
-            if (image == null)
-                return;
-
-            // 👇 Animate image (pulse effect)
-            await image.ScaleTo(0.8, 100, Easing.CubicOut);
-            await image.ScaleTo(1, 100, Easing.CubicIn);
-        }
+ 
 
     }
 }

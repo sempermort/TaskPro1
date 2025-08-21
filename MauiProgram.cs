@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using TaskPro1.Helpers;
+using TaskPro1.Helpers.Interfaces;
+using TaskPro1.Helpers.Interfaces.Implementations;
 using TaskPro1.ViewModels;
 using TaskPro1.Views;
 
@@ -26,9 +28,10 @@ namespace TaskPro1
                     });
             builder.Services.AddSingleton<FontAwesomeHelper>();
             
-            // Register our image ontap operations service
+            // Register our image ontap operation service
             builder.Services.AddSingleton<IAnimateOnTap,OnTapService>();
-             builder.Services.AddSingleton<IAnimateOnTap,OnTapService>();
+            // Register our CenterMap operation service
+            builder.Services.AddSingleton<ICenterOnMap, MapCenterService>();
 
             // Register IMessenger (singleton)
             builder.Services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
@@ -37,16 +40,15 @@ namespace TaskPro1
             builder.Services.AddTransient<MapPageViewModel>(sp =>
             {
                 var fontHelper = sp.GetRequiredService<FontAwesomeHelper>();
-                var mapOpsService = sp.GetRequiredService<IMapOperationsService>();
-                return new MapPageViewModel(fontHelper, mapOpsService);
+           
+                return new MapPageViewModel(fontHelper);
             });
-            
             builder.Services.AddTransient<SearchViewModel>(sp =>
             {
-                var mapOpsService = sp.GetRequiredService<IMapOperationsService>();
-                return new SearchViewModel(mapOpsService);
-            });
+                var fontHelper = sp.GetRequiredService<FontAwesomeHelper>();
 
+                return new SearchViewModel(fontHelper);
+            });
             // Register MapPage with a factory to inject dependencies
             builder.Services.AddTransient<MapPageCompositeViewModel>(sp =>
             {

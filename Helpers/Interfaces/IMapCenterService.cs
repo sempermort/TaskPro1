@@ -1,4 +1,4 @@
-﻿namespace TaskPro1.Helpers
+﻿namespace TaskPro1.Helpers.Interfaces
 {
     internal interface IMapCenterService
     {

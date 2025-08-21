@@ -1,6 +1,6 @@
 using TaskPro1.Models;
 
-namespace TaskPro1.Helpers
+namespace TaskPro1.Helpers.Interfaces
 {
     public interface IMapOperationsService
     {

@@ -3,6 +3,7 @@ using Mapsui.Layers;
 using Mapsui.Projections;
 using SkiaSharp;
 using TaskPro1.Helpers;
+using TaskPro1.Helpers.Interfaces;
 using TaskPro1.ViewModels;
 using Windows.Devices.Geolocation;
 
@@ -27,10 +28,8 @@ public partial class MapPage : ContentPage
     {
         InitializeComponent();
         viewModel = compositeVM;
-        SetCompositeBindingContext(compositeVM.MapPageVM, compositeVM.SearchVM);
-        
-        // Initialize the map operations service
-        _mapOperationsService = new MapOperationsService(mapView, new Image());
+        SetCompositeBindingContext(compositeVM.MapPageVM, compositeVM.SearchVM);        
+
     }
 
     private void SetDefaultBindingContext()
